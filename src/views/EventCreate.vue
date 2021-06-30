@@ -44,7 +44,8 @@
   </div>
 </template>
 <script>
-import {store} from '@/store';
+import { store } from "@/store";
+import { v4 as uuidv4 } from "uuid";
 export default {
   data() {
     return {
@@ -67,12 +68,21 @@ export default {
         time: "",
         organizer: "",
       },
+      store: {},
     };
+  },
+  created() {
+    this.store = store;
   },
   methods: {
     onSubmit() {
-        this.event.organizer= store.state.user;
-      console.log("Event:", this.event);
+      const event = {
+        ...this.event,
+        id: uuidv4(),
+        organizer: store.state.user,
+      };
+      console.log("event", event);
+      store.dispatch("createEvent", event);
     },
   },
 };
